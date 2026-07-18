@@ -1,12 +1,6 @@
 # LodeSTAR
 
-```text
- _          _      ____  _____ ____ _____  _    ____
-| |    ___ | | ___/ ___||_   _/ ___|_   _|/ \  |  _ \
-| |   / _ \| |/ _ \___ \  | | \___ \ | | / _ \ | |_) |
-| |__| (_) | |  __/___) | | |  ___) || |/ ___ \|  _ <
-|_____\___/|_|\___|____/  |_| |____/ |_/_/   \_\_| \_\
-```
+![LodeSTAR founder signal constellation](assets/lodestar-banner.svg)
 
 Discover exceptional founders before they start fundraising.
 

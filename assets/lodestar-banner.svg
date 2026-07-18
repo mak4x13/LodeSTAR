@@ -1,0 +1,70 @@
+<svg width="1280" height="460" viewBox="0 0 1280 460" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">LodeSTAR</title>
+  <desc id="desc">Founder signal constellation converging into evidence-backed VC conviction.</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1280" y2="460" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#07110F"/>
+      <stop offset="0.52" stop-color="#0C1724"/>
+      <stop offset="1" stop-color="#160F2A"/>
+    </linearGradient>
+    <linearGradient id="signal" x1="160" y1="74" x2="1090" y2="376" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#41F2B5"/>
+      <stop offset="0.5" stop-color="#86D9FF"/>
+      <stop offset="1" stop-color="#F8D66D"/>
+    </linearGradient>
+    <radialGradient id="core" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(640 226) rotate(90) scale(210 470)">
+      <stop stop-color="#123C44"/>
+      <stop offset="0.58" stop-color="#0D1723" stop-opacity="0.72"/>
+      <stop offset="1" stop-color="#0D1723" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="460" rx="34" fill="url(#bg)"/>
+  <rect x="18" y="18" width="1244" height="424" rx="26" stroke="#B9F8DD" stroke-opacity="0.12"/>
+  <path d="M61 356C210 271 349 228 480 226C603 224 693 271 808 257C915 244 1043 181 1215 86" stroke="#B9F8DD" stroke-opacity="0.08" stroke-width="2"/>
+  <path d="M71 103C225 180 368 218 501 217C624 216 724 171 839 184C948 196 1068 252 1208 354" stroke="#86D9FF" stroke-opacity="0.08" stroke-width="2"/>
+  <ellipse cx="640" cy="226" rx="470" ry="210" fill="url(#core)"/>
+
+  <g stroke="url(#signal)" stroke-width="2.2" stroke-linecap="round" stroke-opacity="0.74">
+    <path d="M149 312L260 238L382 276L492 184L640 226L782 154L908 212L1054 128"/>
+    <path d="M215 126L324 186L492 184"/>
+    <path d="M382 276L455 342L640 226L728 333L908 212"/>
+    <path d="M782 154L846 92L1054 128L1135 242"/>
+  </g>
+
+  <g filter="url(#glow)">
+    <circle cx="149" cy="312" r="7" fill="#41F2B5"/>
+    <circle cx="260" cy="238" r="5" fill="#86D9FF"/>
+    <circle cx="382" cy="276" r="7" fill="#41F2B5"/>
+    <circle cx="492" cy="184" r="6" fill="#F8D66D"/>
+    <circle cx="640" cy="226" r="10" fill="#FFFFFF"/>
+    <circle cx="782" cy="154" r="6" fill="#86D9FF"/>
+    <circle cx="908" cy="212" r="7" fill="#41F2B5"/>
+    <circle cx="1054" cy="128" r="8" fill="#F8D66D"/>
+    <circle cx="215" cy="126" r="5" fill="#86D9FF"/>
+    <circle cx="324" cy="186" r="4" fill="#F8D66D"/>
+    <circle cx="455" cy="342" r="5" fill="#41F2B5"/>
+    <circle cx="728" cy="333" r="5" fill="#F8D66D"/>
+    <circle cx="846" cy="92" r="4" fill="#86D9FF"/>
+    <circle cx="1135" cy="242" r="5" fill="#41F2B5"/>
+  </g>
+
+  <g opacity="0.72">
+    <text x="138" y="352" fill="#B9F8DD" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" letter-spacing="1">GitHub</text>
+    <text x="340" y="315" fill="#B9F8DD" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" letter-spacing="1">Web</text>
+    <text x="835" y="79" fill="#B9F8DD" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" letter-spacing="1">Evidence</text>
+    <text x="1032" y="103" fill="#B9F8DD" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="20" letter-spacing="1">Conviction</text>
+  </g>
+
+  <text x="640" y="220" text-anchor="middle" fill="#F8FAFC" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="104" font-weight="800" letter-spacing="4">LodeSTAR</text>
+  <text x="640" y="268" text-anchor="middle" fill="#B9F8DD" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="24" letter-spacing="5">FOUNDER SIGNALS TO VC CONVICTION</text>
+  <rect x="451" y="294" width="378" height="42" rx="21" fill="#FFFFFF" fill-opacity="0.06" stroke="#B9F8DD" stroke-opacity="0.18"/>
+  <text x="640" y="322" text-anchor="middle" fill="#E9FFF7" font-family="Inter, Segoe UI, Arial, sans-serif" font-size="17" letter-spacing="1.8">LIVE DATA · EVIDENCE · MEMORY · TRACE</text>
+</svg>
