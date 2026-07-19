@@ -19,8 +19,8 @@ export function AppShell({ apiStatus }: { apiStatus: "checking" | "online" | "of
           <span>LODESTAR</span>
         </NavLink>
         <nav className={open ? "nav-links open" : "nav-links"} aria-label="Primary navigation">
-          <NavLink to="/" end onClick={() => setOpen(false)}>Conviction</NavLink>
-          <NavLink to="/apply" onClick={() => setOpen(false)}>Get evaluated</NavLink>
+          <NavLink to="/" end onClick={() => setOpen(false)}><strong>For Investors</strong><small>Conviction</small></NavLink>
+          <NavLink to="/apply" onClick={() => setOpen(false)}><strong>For Founders</strong><small>Get evaluated</small></NavLink>
         </nav>
         <div className="nav-meta">
           <Activity size={17} />
