@@ -1,41 +1,107 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="470" viewBox="0 0 1200 470" role="img" aria-labelledby="title desc">
-  <title id="title">LodeSTAR system architecture</title>
-  <desc id="desc">Founder signals enter an agent pipeline, become verified evidence and persistent memory, and produce an investment decision.</desc>
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900" role="img" aria-labelledby="title desc">
+  <title id="title">LodeSTAR operating loop</title>
+  <desc id="desc">A clean operating-loop diagram showing how LodeSTAR converts live founder signals into evidence-backed investment decisions.</desc>
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#080808"/><stop offset="1" stop-color="#181818"/></linearGradient>
-    <linearGradient id="signal" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#8bffca"/></linearGradient>
-    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto"><path d="M0 0l10 5-10 5z" fill="#8bffca"/></marker>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#050706"/>
+      <stop offset="0.52" stop-color="#0a1112"/>
+      <stop offset="1" stop-color="#12101a"/>
+    </linearGradient>
+    <linearGradient id="mint" x1="0" y1="0" x2="1" y2="0">
+      <stop stop-color="#71ffd1"/>
+      <stop offset="1" stop-color="#d8fff2"/>
+    </linearGradient>
+    <filter id="glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="9" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
     <style>
-      .label{font:700 12px Arial,sans-serif;letter-spacing:1.5px;fill:#8bffca}.title{font:800 24px Arial,sans-serif;fill:#fff}.copy{font:400 13px Arial,sans-serif;fill:#aaa}.node{fill:#171717;stroke:#414141;stroke-width:1}.core{fill:#f7f7f7;stroke:#fff}.coreTitle{font:800 21px Arial,sans-serif;fill:#0b0b0b}.coreCopy{font:400 12px Arial,sans-serif;fill:#555}.line{fill:none;stroke:url(#signal);stroke-width:2;marker-end:url(#arrow)}
+      .kicker{font:800 20px Arial,sans-serif;letter-spacing:5px;fill:#71ffd1}
+      .headline{font:900 60px Arial,sans-serif;fill:#ffffff}
+      .subhead{font:500 24px Arial,sans-serif;fill:#b8b8b8}
+      .sectionLabel{font:800 18px Arial,sans-serif;letter-spacing:3px;fill:#71ffd1}
+      .sectionTitle{font:900 34px Arial,sans-serif;fill:#ffffff}
+      .copy{font:500 21px Arial,sans-serif;fill:#b7b7b7}
+      .small{font:700 17px Arial,sans-serif;fill:#9f9f9f}
+      .chipText{font:800 18px Arial,sans-serif;fill:#0b1511}
+      .card{fill:#151715;stroke:#393d3a;stroke-width:1.6}
+      .panel{fill:#101211;stroke:#242a27;stroke-width:1.4}
+      .light{fill:#f5f4ee;stroke:#ffffff;stroke-width:1.8}
+      .lightTitle{font:900 31px Arial,sans-serif;fill:#080808}
+      .lightCopy{font:500 19px Arial,sans-serif;fill:#555555}
+      .decision{font:900 30px Arial,sans-serif;fill:#ffffff}
+      .divider{stroke:#ffffff;stroke-opacity:.12}
     </style>
   </defs>
-  <rect width="1200" height="470" rx="18" fill="url(#bg)"/>
-  <text x="46" y="53" class="label">FROM RAW SIGNAL TO INVESTMENT CONVICTION</text>
-  <text x="46" y="86" class="title">THE LODESTAR DECISION ENGINE</text>
-  <line x1="46" y1="111" x2="1154" y2="111" stroke="#343434"/>
 
-  <rect class="node" x="46" y="153" width="205" height="92" rx="10"/><text class="label" x="66" y="180">01 / DISCOVER</text><text class="title" x="66" y="210">Live signals</text><text class="copy" x="66" y="232">GitHub · Tavily · PDF · Voice</text>
-  <rect class="node" x="46" y="285" width="205" height="92" rx="10"/><text class="label" x="66" y="312">02 / DEFINE</text><text class="title" x="66" y="342">Investor thesis</text><text class="copy" x="66" y="364">Stage · sector · risk · ownership</text>
+  <rect width="1600" height="900" rx="38" fill="url(#bg)"/>
+  <rect x="34" y="34" width="1532" height="832" rx="32" fill="none" stroke="#ffffff" stroke-opacity="0.07"/>
 
-  <path class="line" d="M251 199H344"/><path class="line" d="M251 331H302Q320 331 320 313V219Q320 199 344 199"/>
-  <rect class="core" x="344" y="153" width="252" height="224" rx="12"/>
-  <text class="label" x="368" y="182" fill="#087648">AGENT ORCHESTRATION</text>
-  <text class="coreTitle" x="368" y="218">Source</text><text class="coreCopy" x="474" y="218">find candidates</text>
-  <line x1="368" y1="235" x2="572" y2="235" stroke="#d4d4d4"/>
-  <text class="coreTitle" x="368" y="268">Screen</text><text class="coreCopy" x="474" y="268">score three axes</text>
-  <line x1="368" y1="285" x2="572" y2="285" stroke="#d4d4d4"/>
-  <text class="coreTitle" x="368" y="318">Diligence</text><text class="coreCopy" x="474" y="318">verify every claim</text>
-  <line x1="368" y1="335" x2="572" y2="335" stroke="#d4d4d4"/>
-  <text class="coreTitle" x="368" y="365">Decide</text><text class="coreCopy" x="474" y="365">build the memo</text>
+  <text x="88" y="98" class="kicker">FOUNDER DISCOVERY OPERATING LOOP</text>
+  <text x="88" y="160" class="headline">LodeSTAR turns signals into conviction</text>
+  <text x="90" y="205" class="subhead">One investor workspace for sourcing, evidence, memory, and decision-ready memos.</text>
+  <line x1="88" y1="248" x2="1512" y2="248" class="divider"/>
 
-  <path class="line" d="M596 211H685"/><path class="line" d="M596 319H685"/>
-  <rect class="node" x="685" y="153" width="205" height="116" rx="10"/><text class="label" x="705" y="180">PROOF LAYER</text><text class="title" x="705" y="212">Evidence ledger</text><text class="copy" x="705" y="237">Provenance · trust · gaps</text><text class="copy" x="705" y="256">Contradiction register</text>
-  <rect class="node" x="685" y="285" width="205" height="92" rx="10"/><text class="label" x="705" y="312">MEMORY LAYER</text><text class="title" x="705" y="342">Supabase</text><text class="copy" x="705" y="364">Profiles · scores · live traces</text>
+  <g id="loop">
+    <rect class="panel" x="88" y="302" width="1424" height="426" rx="28"/>
 
-  <path class="line" d="M890 211H963"/><path class="line" d="M890 331H925Q943 331 943 313V231Q943 211 963 211"/>
-  <rect x="963" y="153" width="191" height="224" rx="12" fill="#0b3627" stroke="#8bffca"/>
-  <circle cx="1058" cy="207" r="25" fill="#8bffca" filter="url(#glow)"/><path d="M1047 207l8 8 15-18" fill="none" stroke="#071b13" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-  <text class="label" x="987" y="257">DECISION OUTPUT</text><text class="title" x="987" y="291">Invest</text><text class="title" x="987" y="321">Continue diligence</text><text class="title" x="987" y="351">Pass</text>
-  <text x="1154" y="431" text-anchor="end" class="copy">Evidence-backed conviction · target under 24 hours</text>
+    <rect class="card" x="132" y="346" width="300" height="326" rx="22"/>
+    <circle cx="174" cy="389" r="23" fill="#71ffd1" filter="url(#glow)"/>
+    <text x="166" y="397" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="#071b13">1</text>
+    <text x="212" y="397" class="sectionLabel">CAPTURE</text>
+    <text x="164" y="458" class="sectionTitle">Live founder</text>
+    <text x="164" y="498" class="sectionTitle">signals</text>
+    <text x="164" y="548" class="copy">GitHub activity</text>
+    <text x="164" y="582" class="copy">Tavily web results</text>
+    <text x="164" y="616" class="copy">PDF decks and voice</text>
+
+    <rect class="light" x="472" y="346" width="300" height="326" rx="22"/>
+    <circle cx="514" cy="389" r="23" fill="#111111"/>
+    <text x="506" y="397" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="#71ffd1">2</text>
+    <text x="552" y="397" class="sectionLabel" fill="#16a373">REASON</text>
+    <text x="504" y="458" class="lightTitle">Source</text>
+    <text x="504" y="506" class="lightTitle">Screen</text>
+    <text x="504" y="554" class="lightTitle">Diligence</text>
+    <text x="504" y="602" class="lightTitle">Decide</text>
+    <text x="642" y="458" class="lightCopy">normalize</text>
+    <text x="642" y="506" class="lightCopy">score axes</text>
+    <text x="668" y="554" class="lightCopy">verify</text>
+    <text x="642" y="602" class="lightCopy">write memo</text>
+
+    <rect class="card" x="812" y="346" width="300" height="326" rx="22"/>
+    <circle cx="854" cy="389" r="23" fill="#71ffd1" filter="url(#glow)"/>
+    <text x="846" y="397" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="#071b13">3</text>
+    <text x="892" y="397" class="sectionLabel">PROVE</text>
+    <text x="844" y="458" class="sectionTitle">Evidence</text>
+    <text x="844" y="498" class="sectionTitle">and memory</text>
+    <text x="844" y="548" class="copy">Claim provenance</text>
+    <text x="844" y="582" class="copy">Trust and gaps</text>
+    <text x="844" y="616" class="copy">Supabase traces</text>
+
+    <rect x="1152" y="346" width="316" height="326" rx="22" fill="#0b3a28" stroke="#71ffd1" stroke-width="2.4"/>
+    <circle cx="1194" cy="389" r="23" fill="#71ffd1" filter="url(#glow)"/>
+    <text x="1186" y="397" font-family="Arial,sans-serif" font-size="22" font-weight="900" fill="#071b13">4</text>
+    <text x="1232" y="397" class="sectionLabel">DECIDE</text>
+    <text x="1184" y="458" class="sectionTitle">Investment</text>
+    <text x="1184" y="498" class="sectionTitle">output</text>
+    <text x="1184" y="552" class="decision">Invest</text>
+    <text x="1184" y="596" class="decision">Continue review</text>
+    <text x="1184" y="640" class="decision">Pass</text>
+  </g>
+
+  <g id="chips">
+    <rect x="140" y="776" width="202" height="48" rx="24" fill="url(#mint)"/>
+    <text x="172" y="807" class="chipText">No mock data</text>
+    <rect x="374" y="776" width="260" height="48" rx="24" fill="url(#mint)"/>
+    <text x="407" y="807" class="chipText">Every claim cited</text>
+    <rect x="666" y="776" width="292" height="48" rx="24" fill="url(#mint)"/>
+    <text x="700" y="807" class="chipText">Scores never averaged</text>
+    <rect x="990" y="776" width="324" height="48" rx="24" fill="url(#mint)"/>
+    <text x="1024" y="807" class="chipText">Live reasoning traces</text>
+  </g>
+
+  <text x="1512" y="850" text-anchor="end" class="small">Target: evidence-backed conviction inside 24 hours</text>
 </svg>

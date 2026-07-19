@@ -47,6 +47,11 @@ The running application does not use fake founders, evidence, scores, or memos. 
 
 ![LodeSTAR architecture: live signals and investor thesis flow through sourcing, screening, diligence, evidence, memory, and decision agents](assets/lodestar-architecture.svg)
 
+The architecture is built around one rule: every recommendation must trace back
+to live evidence. GitHub, Tavily, uploaded decks, and voice transcripts all enter
+the same agent pipeline, then land in Supabase as durable founder memory,
+evidence, scores, contradictions, and live trace events.
+
 ```text
 frontend/                 React, Vite, TypeScript, Tailwind CSS
   src/pages/              Dashboard, founder profile, founder intake
@@ -65,6 +70,16 @@ BUILD_BRIEF.md            Hackathon challenge and implementation brief
 ```
 
 ## Local Setup
+
+After pulling new changes, refresh both dependency sets:
+
+```powershell
+cd backend
+.\.venv\Scripts\python.exe -m pip install -r requirements.txt
+
+cd ..\frontend
+npm install
+```
 
 ### 1. Supabase
 
@@ -169,3 +184,11 @@ python scripts/check_integrations.py
 ```
 
 The integration check performs live API calls and may consume a small amount of provider quota. GitHub Actions runs the frontend build and backend compilation on every push and pull request.
+
+## Current Readiness
+
+- Core backend pipeline is live against GitHub, Tavily, OpenAI, and Supabase.
+- Frontend dependencies install and the Vite production build passes.
+- ElevenLabs is optional for the core demo and can remain disconnected until
+  credits or provider-side access are fixed.
+- Deployment is intentionally left for the final release step.
