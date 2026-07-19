@@ -1,4 +1,4 @@
-import { ArrowRight, Clock3 } from "lucide-react";
+import { ArrowDown, Clock3 } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
 import { FounderPipeline } from "../components/FounderPipeline";
 import { LiveFeed, type RealtimeStatus } from "../components/LiveFeed";
@@ -33,12 +33,24 @@ export default function Dashboard() {
   useEffect(() => { refresh(); }, [refresh]);
 
   useEffect(() => {
+    const refreshWhenVisible = () => {
+      if (document.visibilityState === "visible") refresh();
+    };
+    window.addEventListener("focus", refreshWhenVisible);
+    document.addEventListener("visibilitychange", refreshWhenVisible);
+    return () => {
+      window.removeEventListener("focus", refreshWhenVisible);
+      document.removeEventListener("visibilitychange", refreshWhenVisible);
+    };
+  }, [refresh]);
+
+  useEffect(() => {
     const client = supabase;
     if (!client) return;
     client.from("trace_events")
       .select("*")
       .order("ts", { ascending: false })
-      .limit(30)
+      .limit(3)
       .then(({ data }) => {
         if (data) setEvents(data as TraceEvent[]);
       });
@@ -47,7 +59,7 @@ export default function Dashboard() {
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "founders" }, () => refresh())
       .on("postgres_changes", { event: "INSERT", schema: "public", table: "trace_events" }, ({ new: row }) => {
         const event = row as TraceEvent;
-        if (!activeRun || event.run_id === activeRun) setEvents((current) => [event, ...current].slice(0, 100));
+        if (!activeRun || event.run_id === activeRun) setEvents((current) => [event, ...current].slice(0, 3));
       }).subscribe((status) => {
         if (status === "SUBSCRIBED") setRealtimeStatus("live");
         if (status === "CHANNEL_ERROR" || status === "TIMED_OUT") setRealtimeStatus("error");
@@ -56,12 +68,12 @@ export default function Dashboard() {
     return () => { client.removeChannel(channel); };
   }, [activeRun, refresh]);
 
-  async function runSourcing(queries: { github: string; web: string; limit: number }) {
+  async function runSourcing(search: { mandate: string; limit: number }) {
     setRunning(true);
     setError(null);
     saveThesis(thesis);
     try {
-      const result = await api.sourceOutbound({ thesis, github_query: queries.github, tavily_query: queries.web || undefined, limit: queries.limit });
+      const result = await api.sourceMandate({ thesis, mandate: search.mandate, limit: search.limit });
       setActiveRun(result.run_id);
       await refresh();
     } catch (reason) {
@@ -74,11 +86,16 @@ export default function Dashboard() {
   return (
     <div className="dashboard-page">
       <section className="mission-strip">
-        <div><span className="eyebrow">THE VC BRAIN / 24-HOUR DEPLOYMENT</span><h1>FIND SIGNAL<br />BEFORE THE ROUND.</h1></div>
-        <div className="mission-copy"><p>Discover exceptional technical founders, verify every claim, and move from raw signal to an evidence-backed investment decision.</p><span><Clock3 size={17} /> $100K CHECK TARGET <ArrowRight size={17} /></span></div>
+        <span className="eyebrow">AUTONOMOUS EARLY-STAGE INTELLIGENCE</span>
+        <h1>BACK THE FOUNDERS<br />OTHERS HAVEN'T FOUND.</h1>
+        <div className="mission-footer">
+          <p>Source before the pitch. Separate proof from promise. Reach conviction while the market is still looking elsewhere.</p>
+          <span><Clock3 size={17} /> TARGET: SIGNAL TO DECISION IN 24H</span>
+          <button className="hero-scroll-button" onClick={() => document.getElementById("command-center")?.scrollIntoView({ behavior: "smooth" })}>Enter the command center <ArrowDown size={17} /></button>
+        </div>
       </section>
       {error && <div className="error-banner" role="alert"><strong>Pipeline unavailable</strong><span>{error}</span><div className="error-actions"><button onClick={refresh}>Retry</button><button onClick={() => setError(null)}>Dismiss</button></div></div>}
-      <div className="workspace-grid">
+      <div className="workspace-grid" id="command-center">
         <ThesisPanel value={thesis} busy={running} onChange={setThesis} onRun={runSourcing} />
         <FounderPipeline founders={founders} loading={loading} />
         <LiveFeed events={events} activeRun={activeRun} running={running} realtimeStatus={realtimeStatus} />

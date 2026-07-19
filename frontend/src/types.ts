@@ -58,6 +58,15 @@ export interface EvidenceItem {
   created_at?: string;
 }
 
+export interface ContradictionItem {
+  id?: string;
+  claim_a: string;
+  claim_b: string;
+  explanation: string;
+  status: "unresolved" | "resolved";
+  created_at?: string;
+}
+
 export interface TraceEvent {
   id: number;
   run_id: string;
@@ -77,6 +86,9 @@ export interface MemoSection {
 
 export interface InvestmentMemo {
   founder_id: string;
+  recommendation: "invest" | "continue_diligence" | "pass";
+  recommendation_rationale: string;
+  decision_conditions: string[];
   company_snapshot: MemoSection;
   investment_hypotheses: MemoSection;
   swot: MemoSection;

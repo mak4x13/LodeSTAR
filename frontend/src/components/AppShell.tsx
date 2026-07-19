@@ -8,7 +8,7 @@ export function AppShell({ apiStatus }: { apiStatus: "checking" | "online" | "of
   return (
     <div className="app-shell">
       <div className="utility-bar">
-        <span>PRIVATE INVESTOR WORKSPACE</span>
+        <span>FOUNDER INTELLIGENCE / PRIVATE WORKSPACE</span>
         <span className={`api-state ${apiStatus}`}>
           <i /> {apiStatus === "checking" ? "CHECKING API" : apiStatus === "online" ? "API ONLINE" : "API OFFLINE"}
         </span>
@@ -19,8 +19,8 @@ export function AppShell({ apiStatus }: { apiStatus: "checking" | "online" | "of
           <span>LODESTAR</span>
         </NavLink>
         <nav className={open ? "nav-links open" : "nav-links"} aria-label="Primary navigation">
-          <NavLink to="/" end onClick={() => setOpen(false)}>Pipeline</NavLink>
-          <NavLink to="/apply" onClick={() => setOpen(false)}>Founder intake</NavLink>
+          <NavLink to="/" end onClick={() => setOpen(false)}>Conviction</NavLink>
+          <NavLink to="/apply" onClick={() => setOpen(false)}>Get evaluated</NavLink>
         </nav>
         <div className="nav-meta">
           <Activity size={17} />

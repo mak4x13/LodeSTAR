@@ -63,6 +63,15 @@ class ScoreItem(BaseModel):
     rationale: str
 
 
+class ContradictionItem(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    claim_a: str
+    claim_b: str
+    explanation: str
+    status: Literal["unresolved", "resolved"] = "unresolved"
+
+
 class RawSignal(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
@@ -90,6 +99,14 @@ class FounderProfile(BaseModel):
     raw_signals: list[RawSignal] = Field(default_factory=list)
 
 
+class CandidateExtraction(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
+    is_candidate: bool
+    reason: str
+    founder: Optional[FounderProfile] = None
+
+
 class FounderRecord(FounderProfile):
     id: UUID
     source: Source
@@ -103,8 +120,9 @@ class FounderAssessment(BaseModel):
     founder: FounderProfile
     evidence: list[EvidenceItem]
     scores: list[ScoreItem]
-    founder_score: Optional[float] = Field(default=None, ge=0, le=100)
-    founder_score_trend: Optional[Trend] = None
+    contradictions: list[ContradictionItem] = Field(default_factory=list)
+    founder_score: float = Field(ge=0, le=100)
+    founder_score_trend: Trend
 
 
 class MemoSection(BaseModel):
@@ -119,6 +137,9 @@ class InvestmentMemo(BaseModel):
     model_config = ConfigDict(extra="forbid")
 
     founder_id: UUID
+    recommendation: Literal["invest", "continue_diligence", "pass"]
+    recommendation_rationale: str
+    decision_conditions: list[str] = Field(default_factory=list)
     company_snapshot: MemoSection
     investment_hypotheses: MemoSection
     swot: MemoSection

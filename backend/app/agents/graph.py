@@ -26,15 +26,16 @@ class Pipeline:
         self.memo = MemoAgent(self.reasoner, self.trace)
 
     async def persist_assessment(self, assessment: FounderAssessment, source: Source) -> dict:
-        founder_row = await self.repo.upsert_founder(assessment.founder.model_dump(), source.value)
+        founder_row = await self.repo.upsert_founder(
+            assessment.founder.model_dump(),
+            source.value,
+            assessment.founder_score,
+            assessment.founder_score_trend.value,
+        )
         founder_id = founder_row["id"]
         await self.repo.insert_evidence(founder_id, [item.model_dump(mode="json") for item in assessment.evidence])
         await self.repo.insert_scores(founder_id, [item.model_dump(mode="json") for item in assessment.scores])
-        await self.repo.update_founder_score(
-            founder_id,
-            assessment.founder_score,
-            assessment.founder_score_trend.value if assessment.founder_score_trend else None,
-        )
+        await self.repo.insert_contradictions(founder_id, [item.model_dump(mode="json") for item in assessment.contradictions])
         return founder_row
 
     async def run_outbound(self, thesis: ThesisConfig, github_query: str, tavily_query: Optional[str], limit: int) -> dict:
@@ -42,10 +43,10 @@ class Pipeline:
         await self.trace.write(run_id, "graph", "run_started", "Starting outbound sourcing pipeline")
         candidates = await self.sourcing.outbound(run_id, thesis, github_query, tavily_query, limit)
         persisted = []
-        for candidate in candidates:
+        for candidate, source in candidates:
             assessment = await self.screening.screen(run_id, candidate, thesis)
             reviewed = await self.diligence.verify(run_id, assessment, thesis)
-            persisted.append(await self.persist_assessment(reviewed, Source.outbound_github))
+            persisted.append(await self.persist_assessment(reviewed, source))
         await self.trace.write(run_id, "graph", "run_completed", f"Completed outbound run with {len(persisted)} candidates")
         return {"run_id": str(run_id), "founders": persisted}
 

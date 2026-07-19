@@ -19,6 +19,7 @@ class DiligenceAgent:
             system=(
                 "Review the assessment for unsupported claims, contradictions, and missing disclosures. "
                 "Preserve evidence-backed claims, downgrade weak trust scores, and add explicit gaps. "
+                "Record every pair of mutually inconsistent claims in contradictions with an explanation and unresolved status. "
                 "Do not add new facts unless supported by evidence already present in the input."
             ),
             user=str({"assessment": assessment.model_dump(), "thesis": thesis.model_dump() if thesis else None}),

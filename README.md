@@ -15,38 +15,37 @@ LodeSTAR is an AI-first investor workspace built by Team VizMinds for the Maschm
 
 It helps a solo investor discover technical founders before they begin fundraising, test each opportunity against a configurable investment thesis, and produce an evidence-backed decision memo within 24 hours.
 
+## Team VizMinds
+
+<table>
+  <thead>
+    <tr><th align="left">Member</th><th align="left">Role</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Muneeb Ahmed Khan</strong></td><td>Team Lead and Systems/Agent Architecture</td></tr>
+    <tr><td><strong>Abdullah</strong></td><td>Frontend Engineer and Product Design</td></tr>
+    <tr><td><strong>Ayna Khan</strong></td><td>Backend Engineer, Data and Integrations Lead</td></tr>
+  </tbody>
+</table>
+
 ## Product
 
 - **Thesis Engine** configures sector, stage, geography, check size, ownership target, and risk appetite.
-- **Outbound Sourcing** combines live GitHub and Tavily discovery.
-- **Inbound Intake** sends written applications and voice transcripts through the same pipeline.
+- **Outbound Sourcing** translates a natural-language mandate into live GitHub and independent Tavily founder discovery.
+- **Inbound Intake** sends PDF pitch decks and voice transcripts through the same pipeline.
 - **Three-Axis Screening** scores Founder, Market, and Idea vs. Market independently.
 - **Evidence Ledger** stores claim provenance, source snippets, trust scores, and explicit gaps.
+- **Contradiction Register** preserves mutually inconsistent founder claims for investor review.
 - **Live Reasoning Feed** streams agent trace events through Supabase Realtime.
 - **Founder Memory** persists profiles and score trends across runs.
 - **Investment Memo** generates five required decision sections with evidence references.
+- **Decision Outcome** returns Invest, Continue diligence, or Pass with conditions and elapsed time against the 24-hour target.
 
 The running application does not use fake founders, evidence, scores, or memos. Missing integrations return an explicit setup or provider error.
 
 ## Architecture
 
-```mermaid
-flowchart LR
-  UI[React Investor Workspace] --> API[FastAPI API]
-  API --> Source[Sourcing Agent]
-  Source --> GH[GitHub API]
-  Source --> TAV[Tavily API]
-  Source --> Screen[Screening Agent]
-  Screen --> Diligence[Diligence Agent]
-  Diligence --> Store[(Supabase Postgres)]
-  Store --> Memo[Decision Agent]
-  Source --> Trace[(trace_events)]
-  Screen --> Trace
-  Diligence --> Trace
-  Memo --> Trace
-  Trace --> UI
-  Store --> UI
-```
+![LodeSTAR architecture: live signals and investor thesis flow through sourcing, screening, diligence, evidence, memory, and decision agents](assets/lodestar-architecture.svg)
 
 ```text
 frontend/                 React, Vite, TypeScript, Tailwind CSS
@@ -71,6 +70,7 @@ BUILD_BRIEF.md            Hackathon challenge and implementation brief
 
 1. Create a Supabase project.
 2. Run `docs/data-model.sql` in the SQL editor.
+   Existing projects should also run `docs/migration-contradictions.sql`.
 3. Enable RLS and frontend read policies for the exposed tables.
 4. Enable Realtime replication for `public.trace_events` and `public.founders`.
 5. Copy the project URL, anon key, and service role key.
@@ -102,7 +102,13 @@ SUPABASE_URL=
 SUPABASE_SERVICE_ROLE_KEY=
 ```
 
-`GITHUB_TOKEN` is recommended for higher API limits. `ELEVENLABS_API_KEY` is required only for live ElevenLabs connectivity; transcript intake works through `/api/voice/transcript`.
+`GITHUB_TOKEN` is recommended for higher API limits. For voice, set `ELEVENLABS_API_KEY` and `ELEVENLABS_AGENT_ID`. Create a private ElevenLabs Agent that interviews founders about their identity, problem, product, market, execution evidence, traction, funding, and unknowns. The backend exchanges the private API key for a short-lived signed URL; the key is never sent to the browser. Transcript intake remains available through `/api/voice/transcript`.
+
+Recommended ElevenLabs Agent system prompt:
+
+```text
+You are LodeSTAR's founder interviewer. Help a founder explain their potential even if they have no deck, funding, network, or public track record. Ask one concise question at a time. Establish the founder's name and company, the problem and urgency, product and workflow, target user and market, execution evidence, traction and KPIs, team history, funding status, risks, and what remains unknown. Probe claims for concrete examples and numbers without inventing facts. End with a short factual recap and ask the founder to correct it. Never promise funding or make the investment decision.
+```
 
 ### 3. Frontend
 
@@ -125,11 +131,12 @@ Open `http://127.0.0.1:5173`.
 
 ## Demo Flow
 
-1. Set the investment thesis on the dashboard.
-2. Run outbound sourcing and watch the live reasoning feed.
-3. Open a ranked founder to inspect scores, evidence trust, and gaps.
-4. Generate the investment memo and follow its evidence references.
-5. Show the written or voice-transcript inbound path under Founder Intake.
+1. Define the investment thesis and a natural-language founder mandate.
+2. Scan GitHub and the open web; watch the latest Decision Stream events.
+3. Open a founder to inspect three independent scores, evidence trust, contradictions, and gaps.
+4. Challenge the evidence or recalculate conviction and review the visible run results.
+5. Generate an Invest / Continue diligence / Pass memo with conditions and 24-hour timing.
+6. Demonstrate both PDF pitch-deck intake and the ElevenLabs voice interview.
 
 ## API
 
@@ -139,8 +146,11 @@ Open `http://127.0.0.1:5173`.
 | `GET` | `/api/founders` | Founder memory |
 | `GET` | `/api/founders/{id}` | Profile, evidence, and scores |
 | `POST` | `/api/source/outbound` | GitHub and Tavily sourcing pipeline |
+| `POST` | `/api/source/mandate` | Natural-language GitHub + web founder discovery |
 | `POST` | `/api/source/inbound` | Written application pipeline |
+| `POST` | `/api/source/inbound/deck` | PDF pitch-deck evaluation pipeline |
 | `POST` | `/api/voice/transcript` | Voice transcript pipeline |
+| `POST` | `/api/voice/session` | Private ElevenLabs interview session |
 | `POST` | `/api/screen` | Re-run three-axis screening |
 | `POST` | `/api/diligence` | Re-run evidence review |
 | `POST` | `/api/decision` | Generate investment memo |
@@ -159,11 +169,3 @@ python scripts/check_integrations.py
 ```
 
 The integration check performs live API calls and may consume a small amount of provider quota. GitHub Actions runs the frontend build and backend compilation on every push and pull request.
-
-## Team VizMinds
-
-| Member | Role |
-| --- | --- |
-| Muneeb Ahmed Khan | Team Lead and Systems/Agent Architecture |
-| Abdullah | Frontend Engineer and Product Design |
-| Ayna Khan | Backend Engineer, Data and Integrations Lead |

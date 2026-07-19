@@ -26,6 +26,7 @@ async def get_founder(founder_id: str):
             "founder": founder,
             "evidence": await repo.get_evidence(founder_id),
             "scores": await repo.get_scores(founder_id),
+            "contradictions": await repo.get_contradictions(founder_id),
         }
     except IntegrationNotConfigured as exc:
         raise configuration_error(exc) from exc

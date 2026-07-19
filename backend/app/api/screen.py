@@ -22,6 +22,12 @@ async def screen_founder(request: ScreenRequest):
         assessment = await pipeline.screening.screen(run_id, profile, request.thesis)
         reviewed = await pipeline.diligence.verify(run_id, assessment, request.thesis)
         persisted = await pipeline.persist_assessment(reviewed, Source(founder["source"]))
-        return {"run_id": str(run_id), "founder": persisted}
+        return {
+            "run_id": str(run_id),
+            "founder": persisted,
+            "scores": [item.model_dump(mode="json") for item in reviewed.scores],
+            "evidence": [item.model_dump(mode="json") for item in reviewed.evidence],
+            "contradictions": [item.model_dump(mode="json") for item in reviewed.contradictions],
+        }
     except IntegrationNotConfigured as exc:
         raise configuration_error(exc) from exc

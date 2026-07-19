@@ -19,7 +19,9 @@ class MemoAgent:
             system=(
                 "Write only the required investment memo sections: Company snapshot, Investment hypotheses, SWOT, "
                 "Problem & product, Traction & KPIs. Each bullet must be grounded in provided evidence_refs or listed as a gap. "
-                "Do not invent missing metrics, funding, customers, or team history."
+                "Do not invent missing metrics, funding, customers, or team history. "
+                "Give one explicit recommendation: invest, continue_diligence, or pass. Explain it concisely and list concrete "
+                "conditions that must be resolved before deploying capital. A high founder score alone is not sufficient."
             ),
             user=str(
                 {

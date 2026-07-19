@@ -3,6 +3,7 @@ from __future__ import annotations
 from typing import Any, Optional
 
 from supabase import Client, create_client
+from postgrest.exceptions import APIError
 
 from app.config import Settings, get_settings
 from app.errors import IntegrationNotConfigured
@@ -23,13 +24,21 @@ class SupabaseRepository:
             self.settings.supabase_service_role_key,
         )
 
-    async def upsert_founder(self, founder: dict[str, Any], source: str) -> dict[str, Any]:
+    async def upsert_founder(
+        self,
+        founder: dict[str, Any],
+        source: str,
+        founder_score: float,
+        founder_score_trend: str,
+    ) -> dict[str, Any]:
         identity_key = founder["identity_key"]
         payload = {
             "identity_key": identity_key,
             "name": founder.get("name"),
             "source": source,
             "profile": founder,
+            "founder_score": founder_score,
+            "founder_score_trend": founder_score_trend,
         }
         result = (
             self.client.table("founders")
@@ -39,11 +48,6 @@ class SupabaseRepository:
         if not result.data:
             raise RuntimeError("Supabase did not return a founder after upsert.")
         return result.data[0]
-
-    async def update_founder_score(self, founder_id: str, score: Optional[float], trend: Optional[str]) -> None:
-        self.client.table("founders").update(
-            {"founder_score": score, "founder_score_trend": trend}
-        ).eq("id", founder_id).execute()
 
     async def insert_evidence(self, founder_id: str, evidence: list[dict[str, Any]]) -> list[dict[str, Any]]:
         if not evidence:
@@ -59,6 +63,18 @@ class SupabaseRepository:
         result = self.client.table("scores").insert(rows).execute()
         return result.data or []
 
+    async def insert_contradictions(self, founder_id: str, contradictions: list[dict[str, Any]]) -> list[dict[str, Any]]:
+        if not contradictions:
+            return []
+        rows = [{"founder_id": founder_id, **item} for item in contradictions]
+        try:
+            result = self.client.table("contradictions").insert(rows).execute()
+            return result.data or []
+        except APIError as exc:
+            if "contradictions" in str(exc) and ("schema cache" in str(exc).lower() or "does not exist" in str(exc).lower()):
+                return []
+            raise
+
     async def insert_trace_event(self, event: dict[str, Any]) -> None:
         self.client.table("trace_events").insert(event).execute()
 
@@ -70,6 +86,7 @@ class SupabaseRepository:
         result = (
             self.client.table("founders")
             .select("*")
+            .not_.is_("founder_score", "null")
             .order("updated_at", desc=True)
             .limit(limit)
             .execute()
@@ -83,3 +100,12 @@ class SupabaseRepository:
     async def get_scores(self, founder_id: str) -> list[dict[str, Any]]:
         result = self.client.table("scores").select("*").eq("founder_id", founder_id).execute()
         return result.data or []
+
+    async def get_contradictions(self, founder_id: str) -> list[dict[str, Any]]:
+        try:
+            result = self.client.table("contradictions").select("*").eq("founder_id", founder_id).order("created_at", desc=True).execute()
+            return result.data or []
+        except APIError as exc:
+            if "contradictions" in str(exc) and ("schema cache" in str(exc).lower() or "does not exist" in str(exc).lower()):
+                return []
+            raise

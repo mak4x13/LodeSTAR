@@ -35,6 +35,16 @@ create table if not exists scores (
   created_at timestamptz default now()
 );
 
+create table if not exists contradictions (
+  id uuid primary key default gen_random_uuid(),
+  founder_id uuid references founders(id) on delete cascade,
+  claim_a text not null,
+  claim_b text not null,
+  explanation text not null,
+  status text not null default 'unresolved' check (status in ('unresolved', 'resolved')),
+  created_at timestamptz default now()
+);
+
 create table if not exists trace_events (
   id bigint generated always as identity primary key,
   run_id uuid not null,
@@ -49,6 +59,7 @@ create table if not exists trace_events (
 create index if not exists founders_identity_key_idx on founders(identity_key);
 create index if not exists evidence_founder_id_idx on evidence(founder_id);
 create index if not exists scores_founder_id_idx on scores(founder_id);
+create index if not exists contradictions_founder_id_idx on contradictions(founder_id);
 create index if not exists trace_events_run_id_idx on trace_events(run_id);
 
 create or replace function set_updated_at()

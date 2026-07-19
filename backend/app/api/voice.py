@@ -20,6 +20,14 @@ async def voice_status():
         raise configuration_error(exc) from exc
 
 
+@router.post("/session")
+async def voice_session():
+    try:
+        return {"signed_url": await ElevenLabsClient().signed_conversation_url()}
+    except IntegrationNotConfigured as exc:
+        raise configuration_error(exc) from exc
+
+
 @router.post("/transcript")
 async def voice_transcript(request: VoiceTranscriptRequest):
     try:

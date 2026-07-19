@@ -1,4 +1,4 @@
-import type { FounderRow, InvestmentMemo, ThesisConfig } from "../types";
+import type { ContradictionItem, EvidenceItem, FounderRow, InvestmentMemo, ScoreItem, ThesisConfig } from "../types";
 
 const API_BASE_URL = (import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:8000").replace(/\/$/, "");
 
@@ -36,17 +36,31 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
 export const api = {
   health: () => request<{ status: string; project: string }>("/health"),
   listFounders: (limit = 50) => request<{ founders: FounderRow[] }>(`/api/founders?limit=${limit}`),
-  getFounder: (id: string) => request<{ founder: FounderRow; evidence: unknown[]; scores: unknown[] }>(`/api/founders/${id}`),
+  getFounder: (id: string) => request<{ founder: FounderRow; evidence: EvidenceItem[]; scores: ScoreItem[]; contradictions: ContradictionItem[] }>(`/api/founders/${id}`),
   sourceOutbound: (payload: { thesis: ThesisConfig; github_query: string; tavily_query?: string; limit: number }) =>
     request<{ run_id: string; founders: FounderRow[] }>("/api/source/outbound", { method: "POST", body: JSON.stringify(payload) }),
+  sourceMandate: (payload: { thesis: ThesisConfig; mandate: string; limit: number }) =>
+    request<{ run_id: string; founders: FounderRow[] }>("/api/source/mandate", { method: "POST", body: JSON.stringify(payload) }),
   applyInbound: (payload: Record<string, unknown>) =>
     request<{ run_id: string; founder: FounderRow }>("/api/source/inbound", { method: "POST", body: JSON.stringify(payload) }),
+  applyDeck: async (payload: FormData) => {
+    let response: Response;
+    try { response = await fetch(`${API_BASE_URL}/api/source/inbound/deck`, { method: "POST", body: payload }); }
+    catch { throw new ApiError("Cannot reach the evaluation API."); }
+    if (!response.ok) {
+      const data = await response.json().catch(() => null);
+      throw new ApiError(typeof data?.detail === "string" ? data.detail : data?.detail?.message || `Deck evaluation failed (${response.status})`, response.status);
+    }
+    return response.json() as Promise<{ run_id: string; founder: FounderRow }>;
+  },
   submitTranscript: (payload: { transcript: string; thesis: ThesisConfig }) =>
     request<{ run_id: string; founder: FounderRow }>("/api/voice/transcript", { method: "POST", body: JSON.stringify(payload) }),
+  startVoiceSession: () =>
+    request<{ signed_url: string }>("/api/voice/session", { method: "POST" }),
   screen: (founderId: string, thesis: ThesisConfig) =>
-    request<{ run_id: string; founder: FounderRow }>("/api/screen", { method: "POST", body: JSON.stringify({ founder_id: founderId, thesis }) }),
+    request<{ run_id: string; founder: FounderRow; scores: ScoreItem[]; evidence: EvidenceItem[]; contradictions: ContradictionItem[] }>("/api/screen", { method: "POST", body: JSON.stringify({ founder_id: founderId, thesis }) }),
   diligence: (founderId: string, thesis: ThesisConfig) =>
-    request<{ run_id: string; founder: FounderRow }>("/api/diligence", { method: "POST", body: JSON.stringify({ founder_id: founderId, thesis }) }),
+    request<{ run_id: string; founder: FounderRow; scores: ScoreItem[]; evidence: EvidenceItem[]; contradictions: ContradictionItem[] }>("/api/diligence", { method: "POST", body: JSON.stringify({ founder_id: founderId, thesis }) }),
   decision: (founderId: string, thesis: ThesisConfig) =>
-    request<{ run_id: string; memo: InvestmentMemo }>("/api/decision", { method: "POST", body: JSON.stringify({ founder_id: founderId, thesis }) }),
+    request<{ run_id: string; memo: InvestmentMemo; decision_time_seconds: number; within_24h: boolean }>("/api/decision", { method: "POST", body: JSON.stringify({ founder_id: founderId, thesis }) }),
 };

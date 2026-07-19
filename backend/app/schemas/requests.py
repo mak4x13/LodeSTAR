@@ -14,6 +14,17 @@ class OutboundSourceRequest(BaseModel):
     limit: int = Field(default=5, ge=1, le=10)
 
 
+class SearchMandateRequest(BaseModel):
+    thesis: ThesisConfig
+    mandate: str = Field(min_length=10, max_length=1000)
+    limit: int = Field(default=5, ge=1, le=10)
+
+
+class SearchPlan(BaseModel):
+    github_query: str
+    web_query: str
+
+
 class InboundApplyRequest(BaseModel):
     company_name: str
     founder_name: Optional[str] = None

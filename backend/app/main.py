@@ -90,6 +90,7 @@ async def health():
         "missing_runtime_keys": missing,
         "github_token": "configured" if settings.github_token else "optional_not_configured",
         "elevenlabs": "configured" if settings.elevenlabs_api_key else "not_configured",
+        "elevenlabs_agent": "configured" if settings.elevenlabs_agent_id else "not_configured",
     }
 
 
