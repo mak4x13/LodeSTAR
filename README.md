@@ -65,8 +65,7 @@ backend/                  FastAPI and agent pipeline
   app/schemas/            Request and domain models
 
 docs/data-model.sql       Supabase schema and indexes
-DESIGN.md                 Nike-inspired product design reference
-BUILD_BRIEF.md            Hackathon challenge and implementation brief
+docs/migration-contradictions.sql  Adds contradiction tracking support for evidence review
 ```
 
 ## Local Setup
